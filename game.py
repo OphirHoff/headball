@@ -118,7 +118,7 @@ class Game:
                 
             elif self.is_player_move_ball(player.state, player.x_pos, player.side):
                 self.ball.update_velocity_impulse(player.get_vx(), player.get_vy())     
-            
+
             if player.is_kick and self.__ball_infront_player(player.x_pos, player.side):
                 if player.kick_type == 'side':
                     self.ball.kick_forward(player.side)
@@ -145,7 +145,6 @@ class Game:
 
 
     def check_connection(self):
-        # return self.timeout_cnt1 < 20 and self.timeout_cnt2 < 20
         curr_time = time.time()
         return curr_time - self.p1_last_keep_alive < 6 and curr_time - self.p2_last_keep_alive < 6
     

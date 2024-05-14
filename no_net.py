@@ -51,7 +51,7 @@ def setup_gate():
 
 # setup_background()
 
-side = 'R'
+side = 'L'
 # Load player
 # player = Player(side, 970 if side == 'R' else 213, y_axis)
 player = Player(side, 970 if side == 'R' else 213, y_axis)
@@ -158,6 +158,7 @@ def main():
         collision = MASKS[player.image].overlap(pygame.mask.from_surface(ball.spin()), (ball.x_pos - player.x_pos, ball.y_pos - player.y_pos))
         # Check collision
         if collision:# and not player.is_kick:# and not player.in_gate():
+            print("collision")
             if ball_below_player(player.side, player.x_pos, player.y_pos) and not player.is_kick:
                 player.y_pos -= (player.y_pos + IMGS[player.image].get_height()) - ball.y_pos
                 player.set_jump_vy(-500)
@@ -187,6 +188,8 @@ def main():
 
         setup_background()
 
+        mask_image = pygame.mask.from_surface(ball.spin()).to_surface()
+        screen.blit(mask_image, ball.get_pos())
         screen.blit(IMGS[player.image], player.get_pos())
         # screen.blit(pygame.image.load(opponent.image), opponent.get_pos())
         ball.update_angle()

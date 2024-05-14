@@ -10,7 +10,7 @@ LEFT = 1
 SCROLL = 2
 RIGHT = 3
 
-ip = '127.0.0.1'
+ip = '192.168.1.151'
 server_port = 1234
 
 die = False
@@ -97,10 +97,11 @@ class Client:
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
-                    if pygame.mouse.get_pos()[1] < 440:  # to fix - add as a constant
-                        return True
+                    if pygame.mouse.get_pos()[1] < GAME_CHOOSE_LINE:
+                        return True  # online
                     else:
-                        return False
+                        return False  # offline
+            pygame.display.flip()
 
     def notify_exit(self):
         send_msg(self.sock, f"EXIT~{self.side}".encode(), (ip, self.game_port))
@@ -122,7 +123,6 @@ class Client:
             if not data:
                 cnt += 1
                 if cnt > GAMESTART_TIMEOUT:
-                    print("reached timeout")
                     return False, False
             elif data.split(b'~')[0] == b'STRT':
                 return data, addr
@@ -444,12 +444,22 @@ class Client:
     def ball_above_player(self, player_y_pos):
         return self.ball.y_pos < player_y_pos
     
+    def adjust_player(self):
+        if self.player.get_vx() > 0:
+            self.player.x_pos -= self.player.x_pos + IMGS[self.player.image].get_width() - self.ball.x_pos - 1
+        elif self.player.get_vx() < 0:
+            self.player.x_pos += self.ball.x_pos + self.ball.spin().get_width() - self.player.x_pos - 1
+    
     def handle_ball_collision(self):
         if self.online:
             if self.ball_below_player(self.player.side, self.player.x_pos, self.player.y_pos) and not self.player.is_kick:
                 self.player.y_pos -= (self.player.y_pos + IMGS[self.player.image].get_height()) - self.ball.y_pos
                 self.player.set_jump_vy(-500)
                 self.player.is_jumping = True
+
+            # if self.is_player_move_ball(self.player.x_pos, self.player.side) and self.player.get_vy() == 0 and not self.player.is_kick:
+            #     self.adjust_player()
+            
         else:
             if self.ball_below_player(self.player.side, self.player.x_pos, self.player.y_pos) and not self.player.is_kick:
                 self.player.y_pos -= (self.player.y_pos + IMGS[self.player.image].get_height()) - self.ball.y_pos

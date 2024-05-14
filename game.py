@@ -257,6 +257,7 @@ class Game:
                 self.notify_game_cont()
             
             self.__send_ball_state()
+            self.__send_ball_state()
         
         if not self.error_during_game:
 

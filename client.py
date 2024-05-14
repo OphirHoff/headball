@@ -10,7 +10,7 @@ LEFT = 1
 SCROLL = 2
 RIGHT = 3
 
-ip = '192.168.1.151'
+ip = '127.0.0.1'
 server_port = 1234
 
 die = False
@@ -154,7 +154,7 @@ class Client:
         if succeed:
             data, addr = self.connect()
         else:
-            self.notify_exit()
+            self.notify_lobby_exit()
             return False
 
         if data == 'close':
@@ -211,6 +211,7 @@ class Client:
                 return 'finish'
             
             elif code == b'ERRR':
+                print("recieved error msg")
                 return 'error'
 
             else:
@@ -354,10 +355,15 @@ class Client:
 
 
     def show_connection_lost(self):
+        
         self.screen.blit(IMGS['wifi'], (181, 53))
         pygame.display.flip()
-        time.sleep(5)
 
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+        
     def end_title(self):
 
         res = ''
@@ -457,8 +463,8 @@ class Client:
                 self.player.set_jump_vy(-500)
                 self.player.is_jumping = True
 
-            # if self.is_player_move_ball(self.player.x_pos, self.player.side) and self.player.get_vy() == 0 and not self.player.is_kick:
-            #     self.adjust_player()
+            if self.is_player_move_ball(self.player.x_pos, self.player.side) and self.player.get_vy() == 0 and not self.player.is_kick:
+                self.adjust_player()
             
         else:
             if self.ball_below_player(self.player.side, self.player.x_pos, self.player.y_pos) and not self.player.is_kick:
@@ -503,6 +509,7 @@ class Client:
                     finish = True
                     exit = True
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.notify_exit()
                     die = True
                     finish = True
                     self.pause_music()

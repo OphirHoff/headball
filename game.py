@@ -117,7 +117,7 @@ class Game:
                 self.ball.set_vy(self.ball.get_vy() * -0.5)
                 
             elif self.is_player_move_ball(player.state, player.x_pos, player.side):
-                self.ball.update_velocity_impulse(player.get_vx(), player.get_vy())     
+                self.ball.update_velocity_impulse(player.get_vx(), player.get_vy())
 
             if player.is_kick and self.__ball_infront_player(player.x_pos, player.side):
                 if player.kick_type == 'side':

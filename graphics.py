@@ -131,5 +131,6 @@ TIME_DELTA = 1 / REFRESH_RATE
 
 #  ----------- network constants ------------
 
+MAX_ACTIVE_GAMES = 5
 CONNECTION_TRIES = 2000
 GAMESTART_TIMEOUT = 100

@@ -185,7 +185,7 @@ class Client:
         self.score[0] = int(r_score)
         self.score[1] = int(l_score)
 
-    def handle_message(self, msg: str):
+    def handle_message(self, msg):
         try:
             fields = msg.split(b'~')
             code: bytes = fields[0]
@@ -361,7 +361,7 @@ class Client:
 
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     return
         
     def end_title(self):
@@ -496,13 +496,12 @@ class Client:
 
     def mainloop(self):
 
-        # self.start_music()
+        self.start_music()
         finish = not self.count_down()
 
         global die, connection_lost, exit, goal
 
-        # finish = False
-        while not finish:
+        while not finish and not die:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

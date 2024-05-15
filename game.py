@@ -4,6 +4,7 @@ import pickle
 from ball import Ball 
 from player import Player
 from graphics import *
+import global_vars
 import time
 
 
@@ -215,8 +216,14 @@ class Game:
             ''')
 
         finish = False
-
+        global_vars.active_games += 1
         while not finish:
+
+            if global_vars.all_to_die:
+                self.notify_game_over()
+                self.error_during_game = True
+                print("Closing due to main server issue")
+                break
 
             for event in pygame.event.get():
                 if event.type == pygame.USEREVENT:
@@ -258,7 +265,11 @@ class Game:
             
             self.__send_ball_state()
             self.__send_ball_state()
+
         
+        self.sock.close()
+        global_vars.active_games -= 1
+
         if not self.error_during_game:
 
             print(f'''
@@ -270,10 +281,12 @@ class Game:
         else:
             
             print(f'''
-            |  GAME STOPPED (Connection Error) ({self.p2_score}, {self.p1_score}):
+            |  GAME STOPPED (Encountered Error) ({self.p2_score}, {self.p1_score}):
             |   player1 = {self.p1_addr}
             |   player2 = {self.p2_addr}
             ''')
+        
+        
 
 
             

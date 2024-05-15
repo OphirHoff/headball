@@ -10,7 +10,7 @@ LEFT = 1
 SCROLL = 2
 RIGHT = 3
 
-ip = '127.0.0.1'
+ip = '192.168.1.151'
 server_port = 1234
 
 die = False
@@ -268,13 +268,14 @@ class Client:
             
     def reset_player_pos(self):
         self.player.x_pos = R_START_X if self.player.side == 'R' else L_START_X
-        # self.screen.blit(IMGS[self.player.image], self.player.get_pos())
     
+    def reset_opponent_pos(self):
+        self.opponent.x_pos = R_START_X if self.opponent.side == 'R' else L_START_X
+
     def reset_ball_pos(self):
         self.ball.x_pos = BALL_START_X
         self.ball.y_pos = BALL_AXIS
         self.ball.angle = 0
-        # self.screen.blit(IMGS['ball'], self.ball.get_pos())
 
     def setup_background(self):
         # Load background
@@ -570,6 +571,7 @@ class Client:
             if goal:
                 self.reset_player_pos()
                 self.reset_ball_pos()
+                self.reset_opponent_pos()
                 pygame.display.flip()
                 self.count_down()
                 while goal:

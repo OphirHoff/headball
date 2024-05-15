@@ -39,8 +39,6 @@ def handle_request(request: bytes, addr):
 
 
 def start():
-    
-    # global all_to_die, active_games
 
     print("Server up and running")
 

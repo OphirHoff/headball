@@ -211,7 +211,6 @@ class Client:
                 return 'finish'
             
             elif code == b'ERRR':
-                print("recieved error msg")
                 return 'error'
 
             else:
